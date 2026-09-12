@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Banking Transaction Fraud Detection</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="brand">
+        <h2>🛡️ AI FRAUD</h2>
+        <p>Banking Security</p>
+    </div>
+
+    <nav>
+
+    <button class="nav-item active"
+            onclick="showPage('dashboard', this)">
+        🏠 Dashboard
+    </button>
+
+    <button class="nav-item"
+            onclick="showPage('detect', this)">
+        🔍 Detect Fraud
+    </button>
+
+    <button class="nav-item"
+            onclick="window.location.href='/transaction-history'">
+        📜 Transaction History
+    </button>
+
+    <button class="nav-item"
+            onclick="window.location.href='/reports'">
+        📊 Reports
+    </button>
+
+    <button class="nav-item"
+            onclick="showPage('analytics', this)">
+        📊 Analytics
+    </button>
+
+    <button class="nav-item"
+            onclick="showPage('alerts', this)">
+        🚨 Fraud Alerts
+    </button>
+
+</nav>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+        <div>
+            <h1>Banking Transaction Fraud Detection</h1>
+            <p>AI Powered Transaction Security System</p>
+        </div>
+
+        <div class="ai-status">
+            🟢 AI ONLINE
+        </div>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+
+    <section id="dashboard" class="page-section active-page">
+
+        <div class="welcome-card">
+
+            <div>
+
+                <span class="small-title">
+                    SECURE BANKING
+                </span>
+
+                <h2>
+                    Welcome to AI Fraud Detection
+                </h2>
+
+                <p>
+                    Analyze banking transactions and identify
+                    suspicious activity using intelligent
+                    fraud detection rules.
+                </p>
+
+                <button class="primary-btn"
+                        onclick="showPage('detect')">
+                    🔍 Check Transaction
+                </button>
+
+            </div>
+
+            <div class="welcome-icon">
+                🛡️
+            </div>
+
+        </div>
+
+
+        <div class="section-card">
+
+            <h2>How It Works</h2>
+
+            <div class="steps">
+
+                <div class="step">
+
+                    <span>01</span>
+
+                    <h3>Enter Transaction</h3>
+
+                    <p>
+                        Enter sender, receiver, amount
+                        and transaction details.
+                    </p>
+
+                </div>
+
+
+                <div class="step">
+
+                    <span>02</span>
+
+                    <h3>AI Risk Analysis</h3>
+
+                    <p>
+                        The system checks multiple
+                        fraud detection rules.
+                    </p>
+
+                </div>
+
+
+                <div class="step">
+
+                    <span>03</span>
+
+                    <h3>Fraud Result</h3>
+
+                    <p>
+                        Get risk score and detection
+                        result instantly.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- DETECT -->
+
+    <section id="detect" class="page-section">
+
+        <div class="section-heading">
+
+            <span class="small-title">
+                TRANSACTION SECURITY
+            </span>
+
+            <h2>🔍 Detect Transaction Fraud</h2>
+
+            <p>
+                Enter transaction details to analyze
+                the transaction.
+            </p>
+
+        </div>
+
+
+        <div class="detect-layout">
+
+
+            <!-- FORM -->
+
+            <div class="form-card">
+
+                <h2>💳 Transaction Details</h2>
+
+
+                <form action="{{ url_for('detect') }}"
+                      method="POST"
+                      enctype="multipart/form-data">
+
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label>Account Type</label>
+
+                            <select name="account_type">
+
+                                <option value="Personal">
+                                    Personal
+                                </option>
+
+                                <option value="Business">
+                                    Business
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Sender ID</label>
+
+                            <input type="text"
+                                   name="sender"
+                                   placeholder="Enter Sender ID"
+                                   required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Receiver ID</label>
+
+                            <input type="text"
+                                   name="receiver"
+                                   placeholder="Enter Receiver ID"
+                                   required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Transaction Type</label>
+
+                            <select name="transaction_type">
+
+                                <option value="PAYMENT">
+                                    PAYMENT
+                                </option>
+
+                                <option value="TRANSFER">
+                                    TRANSFER
+                                </option>
+
+                                <option value="WITHDRAWAL">
+                                    WITHDRAWAL
+                                </option>
+
+                                <option value="DEPOSIT">
+                                    DEPOSIT
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Payment Category</label>
+
+                            <select name="payment_category">
+
+                                <option value="Bank Transfer">
+                                    Bank Transfer
+                                </option>
+
+                                <option value="Online Payment">
+                                    Online Payment
+                                </option>
+
+                                <option value="Gaming">
+                                    Gaming
+                                </option>
+
+                                <option value="Fantasy">
+                                    Fantasy
+                                </option>
+
+                                <option value="International">
+                                    International
+                                </option>
+
+                                <option value="Shopping">
+                                    Shopping
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Service / Platform</label>
+
+                            <input type="text"
+                                   name="game_name"
+                                   placeholder="Optional">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Transaction Amount (₹)</label>
+
+                            <input type="number"
+                                   name="amount"
+                                   placeholder="Enter Amount"
+                                   min="0"
+                                   step="0.01"
+                                   required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Payment Received?</label>
+
+                            <select name="payment_received">
+
+                                <option value="Yes">
+                                    Yes
+                                </option>
+
+                                <option value="No">
+                                    No
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group full-width">
+
+                            <label>
+                                Payment Screenshot
+                                (Optional)
+                            </label>
+
+                            <input type="file"
+                                   name="screenshot"
+                                   accept="image/*">
+
+                        </div>
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="detect-btn">
+
+                        🔍 Detect Fraud
+
+                    </button>
+
+                </form>
+
+            </div>
+
+
+           <!-- RESULT -->
+
+<div class="result-card">
+
+    <div class="result-header">
+        🤖 AI Detection Result
+    </div>
+
+    {% if result %}
+
+    <div class="result-content">
+
+        <h2>
+            {{ result }}
+        </h2>
+
+        <div class="risk-box">
+
+            <span>Risk Score</span>
+
+            <strong>
+                {{ risk_score }}%
+            </strong>
+
+        </div>
+
+        {% if rules %}
+
+        <div class="rules-box">
+
+            <h3>🔎 Triggered Rules</h3>
+
+            <ul>
+
+                {% for rule in rules %}
+
+                <li>
+                    {{ rule }}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-result">
+
+        <div class="big-icon">
+            🤖
+        </div>
+
+        <h2>AI Ready</h2>
+
+        <p>
+            Enter transaction details and click
+            Detect Fraud to see the result.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+    <!-- TRANSACTIONS -->
+
+    <section id="transactions" class="page-section">
+
+        <div class="section-heading">
+
+            <span class="small-title">
+                TRANSACTION HISTORY
+            </span>
+
+            <h2>📜 Recent Transactions</h2>
+
+            <p>
+                Recently analyzed transactions.
+            </p>
+
+        </div>
+
+
+        <div class="table-card">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Sender</th>
+                        <th>Receiver</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Risk</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% if transactions %}
+
+                    {% for transaction in transactions %}
+
+                    <tr>
+
+                        <td>
+                            {{ transaction['sender'] }}
+                        </td>
+
+                        <td>
+                            {{ transaction['receiver'] }}
+                        </td>
+
+                        <td>
+                            {{ transaction['payment_category'] }}
+                        </td>
+
+                        <td>
+                            ₹{{ transaction['amount'] }}
+                        </td>
+
+                        <td>
+                            {{ transaction['risk_score'] }}%
+                        </td>
+
+                        <td>
+                            {{ transaction['result'] }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="6">
+                            No transactions available yet.
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ANALYTICS -->
+
+    <section id="analytics" class="page-section">
+
+        <div class="section-heading">
+
+            <span class="small-title">
+                SYSTEM ANALYTICS
+            </span>
+
+            <h2>📊 Transaction Analytics</h2>
+
+            <p>
+                Overview of analyzed transactions.
+            </p>
+
+        </div>
+
+
+        <div class="analytics-grid">
+
+            <div class="stat-card">
+                <span>💳</span>
+                <p>Total Transactions</p>
+                <h2>{{ total }}</h2>
+            </div>
+
+
+            <div class="stat-card">
+                <span>🚨</span>
+                <p>Fraud Detected</p>
+                <h2>{{ fraud }}</h2>
+            </div>
+
+
+            <div class="stat-card">
+                <span>⚠️</span>
+                <p>Suspicious</p>
+                <h2>{{ suspicious }}</h2>
+            </div>
+
+
+            <div class="stat-card">
+                <span>✅</span>
+                <p>Genuine</p>
+                <h2>{{ genuine }}</h2>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FRAUD ALERTS -->
+
+    <section id="alerts" class="page-section">
+
+        <div class="section-heading">
+
+            <span class="small-title">
+                SECURITY ALERTS
+            </span>
+
+            <h2>🚨 Fraud Alerts</h2>
+
+            <p>
+                Fraudulent transactions detected by the system.
+            </p>
+
+        </div>
+
+
+        <div class="alert-card">
+
+            <h2>
+                {{ fraud }}
+            </h2>
+
+            <h3>
+                Fraudulent Transactions Detected
+            </h3>
+
+            <p>
+                High-risk transactions identified by
+                the fraud detection system.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- JAVASCRIPT -->
+
+<script>
+
+function showPage(pageId, button) {
+
+    var pages =
+        document.querySelectorAll(".page-section");
+
+    pages.forEach(function(page) {
+
+        page.classList.remove("active-page");
+
+    });
+
+
+    var selected =
+        document.getElementById(pageId);
+
+    if (selected) {
+
+        selected.classList.add("active-page");
+
+    }
+
+
+    var buttons =
+        document.querySelectorAll(".nav-item");
+
+    buttons.forEach(function(item) {
+
+        item.classList.remove("active");
+
+    });
+
+
+    if (button) {
+
+        button.classList.add("active");
+
+    }
+
+}
+
+</script>
+
+
+</body>
+</html>

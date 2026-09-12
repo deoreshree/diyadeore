@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fraud Detection Reports</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .reports-page {
+            padding: 30px;
+        }
+
+        .reports-title {
+            margin-bottom: 25px;
+        }
+
+        .reports-title h1 {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .reports-title p {
+            color: #8fa8c7;
+        }
+
+        /* STATISTICS */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #0b1b32;
+            border: 1px solid #1c3b61;
+            border-radius: 12px;
+            padding: 22px;
+        }
+
+        .stat-card p {
+            color: #8fa8c7;
+            margin-bottom: 10px;
+        }
+
+        .stat-card h2 {
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .total h2 {
+            color: #3d7cff;
+        }
+
+        .fraud h2 {
+            color: #ff4059;
+        }
+
+        .suspicious h2 {
+            color: #ffae19;
+        }
+
+        .genuine h2 {
+            color: #18d68c;
+        }
+
+        /* ANALYTICS */
+
+        .analytics-card {
+            background: #0b1b32;
+            border: 1px solid #1c3b61;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .analytics-card h2 {
+            margin-bottom: 5px;
+        }
+
+        .analytics-card p {
+            color: #8fa8c7;
+            margin-bottom: 25px;
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #1a2e49;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-genuine {
+            height: 100%;
+            background: #18d68c;
+        }
+
+        .progress-fraud {
+            height: 100%;
+            background: #ff4059;
+        }
+
+        /* RECENT TRANSACTIONS */
+
+        .recent-card {
+            background: #0b1b32;
+            border: 1px solid #1c3b61;
+            border-radius: 12px;
+            padding: 25px;
+            overflow-x: auto;
+        }
+
+        .recent-card h2 {
+            margin-bottom: 5px;
+        }
+
+        .recent-card > p {
+            color: #8fa8c7;
+            margin-bottom: 20px;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+
+        .transaction-table th {
+            background: #123154;
+            color: #dcecff;
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .transaction-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #203955;
+            color: #a9c0dd;
+            font-size: 13px;
+        }
+
+        .transaction-table tr:hover {
+            background: #10243d;
+        }
+
+        .amount {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+        .sender {
+            color: #72aaff !important;
+        }
+
+        .receiver {
+            color: #b795ff !important;
+        }
+
+        .risk {
+            font-weight: 600;
+        }
+
+        .result-genuine {
+            color: #18d68c !important;
+            font-weight: bold;
+        }
+
+        .result-fraud {
+            color: #ff4059 !important;
+            font-weight: bold;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #8fa8c7;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reports-page {
+                padding: 15px;
+            }
+
+        }
+
+    /* ================================
+   REPORT PAGE LAYOUT FIX
+================================ */
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.app-container {
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    width: 260px !important;
+    height: 100vh;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+/* Main content */
+.main-content {
+    margin-left: 260px !important;
+    width: calc(100% - 260px) !important;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Report content */
+.reports-page {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    padding: 30px;
+}
+
+/* Statistics cards */
+.stats-grid {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Analytics */
+.analytics-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Recent transactions */
+.recent-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Table */
+.transaction-table {
+    width: 100%;
+    min-width: 950px;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 220px !important;
+    }
+
+    .main-content {
+        margin-left: 220px !important;
+        width: calc(100% - 220px) !important;
+    }
+
+    .reports-page {
+        padding: 20px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+    </style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <h2>🛡️ AI FRAUD</h2>
+            <p>Banking Security</p>
+        </div>
+
+        <nav>
+
+            <button class="nav-item"
+                    onclick="window.location.href='/'">
+                🏠 Dashboard
+            </button>
+
+            <button class="nav-item"
+                    onclick="window.location.href='/'">
+                🔍 Detect Fraud
+            </button>
+
+            <button class="nav-item"
+                    onclick="window.location.href='/transaction-history'">
+                📜 Transaction History
+            </button>
+
+            <button class="nav-item active">
+                📊 Reports
+            </button>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <div class="reports-page">
+
+            <!-- TITLE -->
+
+            <div class="reports-title">
+
+                <h1>Fraud Detection Reports</h1>
+
+                <p>
+                    Monitor transaction patterns and fraud detection statistics.
+                </p>
+
+            </div>
+
+
+            <!-- STATISTICS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card total">
+
+                    <p>Total Transactions</p>
+
+                    <h2>{{ total }}</h2>
+
+                </div>
+
+
+                <div class="stat-card fraud">
+
+                    <p>Fraud Transactions</p>
+
+                    <h2>{{ fraud }}</h2>
+
+                </div>
+
+
+                <div class="stat-card suspicious">
+
+                    <p>Suspicious Transactions</p>
+
+                    <h2>{{ suspicious }}</h2>
+
+                </div>
+
+
+                <div class="stat-card genuine">
+
+                    <p>Genuine Transactions</p>
+
+                    <h2>{{ genuine }}</h2>
+
+                </div>
+
+            </div>
+
+
+            <!-- ANALYTICS -->
+
+            <div class="analytics-card">
+
+                <h2>📊 Transaction Analytics</h2>
+
+                <p>
+                    Overview of detected transaction activity
+                </p>
+
+
+                <!-- GENUINE -->
+
+                <div class="bar-label">
+
+                    <span>✓ Genuine Transactions</span>
+
+                    <span>{{ genuine }}</span>
+
+                </div>
+
+                <div class="progress">
+
+                    {% if total > 0 %}
+
+                    <div class="progress-genuine"
+                         style="width: {{ (genuine / total * 100)|round(1) }}%;">
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- FRAUD -->
+
+                <div class="bar-label">
+
+                    <span>🚨 Fraud Transactions</span>
+
+                    <span>{{ fraud }}</span>
+
+                </div>
+
+                <div class="progress">
+
+                    {% if total > 0 %}
+
+                    <div class="progress-fraud"
+                         style="width: {{ (fraud / total * 100)|round(1) }}%;">
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT TRANSACTIONS -->
+
+            <div class="recent-card">
+
+                <h2>📋 Recent Transactions</h2>
+
+                <p>
+                    Latest analyzed transactions
+                </p>
+
+
+                <table class="transaction-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Date & Time</th>
+
+                            <th>Sender</th>
+
+                            <th>Receiver</th>
+
+                            <th>Amount</th>
+
+                            <th>Transaction Type</th>
+
+                            <th>Payment Category</th>
+
+                            <th>Risk Score</th>
+
+                            <th>Result</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% if transactions %}
+
+                        {% for t in transactions %}
+
+                        <tr>
+
+                            <td>
+                                {{ t['id'] }}
+                            </td>
+
+                            <td>
+                                {{ t['created_at'] }}
+                            </td>
+
+                            <td class="sender">
+                                {{ t['sender'] or '-' }}
+                            </td>
+
+                            <td class="receiver">
+                                {{ t['receiver'] or '-' }}
+                            </td>
+
+                            <td class="amount">
+                                ₹{{ "{:,.2f}".format(t['amount'] or 0) }}
+                            </td>
+
+                            <td>
+                                {{ t['transaction_type'] or '-' }}
+                            </td>
+
+                            <td>
+                                {{ t['payment_category'] or '-' }}
+                            </td>
+
+                            <td class="risk">
+                                {{ t['risk_score'] or 0 }}%
+                            </td>
+
+                            <td>
+
+                                {% if t['result'] == 'FRAUD DETECTED' %}
+
+                                    <span class="result-fraud">
+                                        🚨 FRAUD
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="result-genuine">
+                                        ✓ GENUINE
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                            <td colspan="9"
+                                class="empty-message">
+
+                                No transactions available.
+
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

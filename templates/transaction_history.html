@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Transaction History</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        body {
+            margin: 0;
+            background: #061226;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .history-container {
+            margin-left: 210px;
+            padding: 35px;
+        }
+
+        .history-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .history-subtitle {
+            color: #7fa4d8;
+            margin-bottom: 25px;
+        }
+
+        .table-card {
+            background: #0a1b33;
+            border: 1px solid #1d3b62;
+            border-radius: 12px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+
+        th {
+            background: #12345a;
+            color: #dbeaff;
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #1c3655;
+            color: #b9d2f2;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #0d2543;
+        }
+
+        .sender {
+            color: #39a0ff;
+            font-weight: bold;
+        }
+
+        .receiver {
+            color: #a77cff;
+            font-weight: bold;
+        }
+
+        .amount {
+            color: white;
+            font-weight: bold;
+        }
+
+        .risk {
+            font-weight: bold;
+        }
+
+        .genuine {
+            color: #00e676;
+            font-weight: bold;
+        }
+
+        .fraud {
+            color: #ff4057;
+            font-weight: bold;
+        }
+
+        .suspicious {
+            color: #ffb300;
+            font-weight: bold;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #7893b5;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <h2>🛡️ AI FRAUD</h2>
+            <p>Banking Security</p>
+        </div>
+
+        <nav>
+
+            <a href="/" class="nav-item">
+                🏠 Dashboard
+            </a>
+
+            <a href="/" class="nav-item">
+                🔍 Detect Fraud
+            </a>
+
+            <a href="/transaction-history"
+               class="nav-item active">
+                📜 Transaction History
+            </a>
+
+            <a href="/reports" class="nav-item">
+                📊 Reports
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="history-container">
+
+        <div class="history-title">
+            Transaction History
+        </div>
+
+        <div class="history-subtitle">
+            View recently analyzed banking transactions
+        </div>
+
+
+        <div class="table-card">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Date & Time</th>
+
+                        <th>Sender</th>
+
+                        <th>Receiver</th>
+
+                        <th>Amount</th>
+
+                        <th>Transaction Type</th>
+
+                        <th>Payment Category</th>
+
+                        <th>Risk Score</th>
+
+                        <th>Result</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% if transactions %}
+
+                    {% for transaction in transactions %}
+
+                    <tr>
+
+                        <td>
+                            {{ transaction['id'] }}
+                        </td>
+
+                        <td>
+                            {{ transaction['created_at'] }}
+                        </td>
+
+                        <td class="sender">
+                            {{ transaction['sender'] if transaction['sender'] else '-' }}
+                        </td>
+
+                        <td class="receiver">
+                            {{ transaction['receiver'] if transaction['receiver'] else '-' }}
+                        </td>
+
+                        <td class="amount">
+                            ₹{{ "{:,.2f}".format(transaction['amount'] or 0) }}
+                        </td>
+
+                        <td>
+                            {{ transaction['transaction_type'] or '-' }}
+                        </td>
+
+                        <td>
+                            {{ transaction['payment_category'] or '-' }}
+                        </td>
+
+                        <td class="risk">
+                            {{ transaction['risk_score'] or 0 }}%
+                        </td>
+
+                        <td>
+
+                            {% if transaction['result'] == 'FRAUD DETECTED' %}
+
+                                <span class="fraud">
+                                    🚨 FRAUD
+                                </span>
+
+                            {% elif transaction['result'] == 'SUSPICIOUS TRANSACTION' %}
+
+                                <span class="suspicious">
+                                    ⚠ SUSPICIOUS
+                                </span>
+
+                            {% else %}
+
+                                <span class="genuine">
+                                    ✓ GENUINE
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="9" class="empty">
+                            No transactions available.
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
